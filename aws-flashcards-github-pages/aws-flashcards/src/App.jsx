@@ -1,0 +1,21 @@
+import React, { useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, RotateCcw, Search, Shuffle } from "lucide-react";
+
+const topicNames = ["Introduction to the Cloud","Compute in the Cloud","Exploring Compute Services","Going Global","Networking","Storage","Databases","AI/ML & Data Analytics","Security","Monitoring, Compliance & Governance","Pricing & Support","Migrating to AWS","Well-Architected Solutions"];
+const sample = [
+ ["What is cloud computing?","The on-demand delivery of IT resources over the internet with pay-as-you-go pricing."],
+ ["What is Amazon EC2?","Amazon Elastic Compute Cloud provides resizable virtual servers, called instances, in the AWS Cloud."],
+ ["What is AWS Lambda?","A serverless compute service that runs code in response to events while AWS handles infrastructure and scaling."],
+ ["What is AWS CloudFormation?","It provisions and manages AWS resources from templates, enabling repeatable Infrastructure as Code deployments."],
+ ["What is an Amazon VPC?","A logically isolated virtual network in AWS where you launch and control AWS resources."],
+ ["What is Amazon S3?","A highly scalable object storage service for storing and retrieving data as objects in buckets."],
+ ["What is Amazon RDS?","A managed relational database service that simplifies common database administration tasks."],
+ ["What is Amazon Bedrock?","A managed service for building generative AI applications using foundation models and related tools."],
+ ["What is AWS IAM?","AWS Identity and Access Management controls authentication and authorization to AWS resources."],
+ ["CloudWatch vs CloudTrail?","CloudWatch focuses on operational monitoring; CloudTrail records account activity and API events."],
+ ["What is AWS Cost Explorer?","A tool for understanding and analyzing AWS costs and usage over time."],
+ ["What does rehost mean?","Move an application to the cloud largely as-is, commonly called lift and shift."],
+ ["What are the six Well-Architected pillars?","Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability."]
+];
+const modules=topicNames.map((title,i)=>({id:i+1,title:`Module ${i+1} · ${title}`,cards:[{q:sample[i][0],a:sample[i][1]}]}));
+export default function App(){const[moduleId,setModuleId]=useState(1),[cardIndex,setCardIndex]=useState(0),[flipped,setFlipped]=useState(false),[query,setQuery]=useState("");const module=modules.find(m=>m.id===moduleId)||modules[0];const cards=useMemo(()=>module.cards.filter(c=>`${c.q} ${c.a}`.toLowerCase().includes(query.toLowerCase())),[module,query]);const card=cards[cardIndex]||cards[0];return <div className="min-h-screen bg-slate-950 text-slate-100 p-3 md:p-8"><div className="max-w-6xl mx-auto"><div className="text-amber-400 font-semibold">AWS CLOUD PRACTITIONER</div><h1 className="text-3xl font-bold my-2">Modules 1–13 Flashcards</h1><div className="grid lg:grid-cols-[290px_1fr] gap-5 mt-6"><aside className="bg-slate-900 rounded-2xl p-3"><div className="grid grid-cols-2 lg:grid-cols-1 gap-2">{modules.map(m=><button key={m.id} onClick={()=>{setModuleId(m.id);setCardIndex(0);setFlipped(false);setQuery("")}} className={`text-left px-3 py-2 rounded-xl text-sm ${moduleId===m.id?"bg-amber-400 text-slate-950 font-bold":"bg-slate-800"}`}>{m.title}</button>)}</div></aside><main><div className="relative mb-4"><Search className="absolute left-3 top-3 text-slate-500" size={19}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search this module..." className="w-full bg-slate-900 rounded-xl pl-10 pr-4 py-3"/></div>{card&&<button onClick={()=>setFlipped(!flipped)} className="w-full min-h-[330px] rounded-3xl bg-slate-900 p-8 text-left"><div className="text-amber-400 text-xs font-bold mb-6">{flipped?"ANSWER":"QUESTION"}</div><div className="text-2xl font-semibold">{flipped?card.a:card.q}</div><div className="mt-10 text-slate-500 flex gap-2"><RotateCcw size={16}/>Tap to flip</div></button>}<div className="flex justify-between mt-5"><button className="bg-slate-800 px-4 py-3 rounded-xl"><ChevronLeft size={19}/></button><button className="bg-amber-400 text-slate-950 px-4 py-3 rounded-xl"><Shuffle size={19}/></button><button className="bg-slate-800 px-4 py-3 rounded-xl"><ChevronRight size={19}/></button></div></main></div></div></div>}
